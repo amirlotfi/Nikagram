@@ -1,0 +1,76 @@
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    compile.exclude module: 'support-v4'
+}
+
+dependencies {
+    compile 'com.google.android.gms:play-services-gcm:10.0.1'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
+    compile 'com.google.android.gms:play-services-vision:10.0.1'
+    compile 'com.android.support:support-core-ui:25.1.0'
+    compile 'com.android.support:support-compat:25.1.0'
+    compile 'com.android.support:support-core-utils:25.1.0'
+    compile 'com.googlecode.mp4parser:isoparser:1.0.6'
+    compile 'co.ronash.android:pushe-base:1.1.0'
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+
+    useLibrary 'org.apache.http.legacy'
+    defaultConfig.applicationId = "ir.nikagram.messenger"
+
+    sourceSets.main.jniLibs.srcDirs = ['./jni/']
+
+    externalNativeBuild {
+        ndkBuild {
+            path "jni/Android.mk"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            jniDebuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            debuggable false
+            jniDebuggable false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        foss {
+            debuggable false
+            jniDebuggable false
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode = 14
+        versionName "3.13.1-N"
+
+        externalNativeBuild {
+            ndkBuild {
+                arguments "NDK_APPLICATION_MK:=jni/Application.mk", "APP_PLATFORM:=android-14"
+                abiFilters "armeabi-v7a", "x86", "armeabi"
+            }
+        }
+    }
+}
